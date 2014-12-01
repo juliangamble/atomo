@@ -86,4 +86,42 @@ exports.testWatchersCanBeRemoved = function(test){
     test.done();
 };
 
+exports.testHistoryCanBeRetrieved = function(test){
+    var oldValue = 42,
+        inc = function(x) { return x + 1; },
+        expectedNewValue = 43;
+
+    at = atom.atom(oldValue);
+    test.equal(at.getHistory().length, 0);
+    at.swap(inc);
+    test.equal(at.getHistory().length, 1);
+    at.swap(inc);
+    test.equal(at.getHistory().length, 2);
+    at.swap(inc);
+
+    test.equal(45, at.deref());
+    test.deepEqual([42, 43, 44], at.getHistory());
+
+    test.done();
+};
+
+exports.testHistoryHasAConfigurableMaximumLength = function(test){
+    var oldValue = 42,
+        inc = function(x) { return x + 1; },
+        expectedNewValue = 43;
+
+    at = atom.atom(oldValue, {historySize: 1});
+    test.equal(at.getHistory().length, 0);
+    at.swap(inc);
+    test.equal(at.getHistory().length, 1);
+    at.swap(inc);
+    test.equal(at.getHistory().length, 1);
+    at.swap(inc);
+
+    test.equal(45, at.deref());
+    test.deepEqual([44], at.getHistory());
+
+    test.done();
+};
+
 // TODO: options: max-history, validators

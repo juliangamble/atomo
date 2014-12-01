@@ -45,8 +45,10 @@ Atom.prototype.reset = function(value){
     }
     var oldVal = this.deref();
     // history
-    // TODO: improvce this
-    this._history = this._history.concat([oldVal]).reverse().slice(this._historySize).reverse();
+    this._history.push(oldVal);
+    this._history = this._history.reverse()
+                          .slice(0, this._historySize)
+                          .reverse();
     this._value = value;
     // watchers
     this.notifyWatchers(oldVal, value);
@@ -54,6 +56,10 @@ Atom.prototype.reset = function(value){
 
 Atom.prototype.swap = function(f){
     this.reset(f(this.deref()));
+};
+
+Atom.prototype.getHistory = function(){
+    return this._history.slice();
 };
 
 function atom(value, options){
