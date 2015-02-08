@@ -36,7 +36,42 @@ describe("atom", function(){
     });
 
     describe("validation", function(){
-        // TODO
+        it("trying to create an atom with an invalid value is not allowed", function(){
+            var invalidValue = 43,
+                validator = function(v) { return v === 42; };
+
+            expect(function(){
+                atom.atom(invalidValue, {validator: validator});
+            }).toThrow();
+            expect(function(){
+                atom.atom(42, {validator: validator});
+            }).not.toThrow();
+        });
+
+        it("trying to swap to a invalid value is not allowed", function(){
+            var inc = function(x) { return x + 1; },
+                validator = function(v) { return v === 42; },
+                at = atom.atom(42, {validator: validator});
+
+            expect(function(){
+                at.swap(inc);
+            }).toThrow();
+            expect(function(){
+                at.swap(function(x) { return x; });
+            }).not.toThrow();
+        });
+
+        it("trying to reset a invalid value is not allowed", function(){
+            var validator = function(v) { return v === 42; },
+                at = atom.atom(42, {validator: validator});
+
+            expect(function(){
+                at.reset(43);
+            }).toThrow();
+            expect(function(){
+                at.reset(42);
+            }).not.toThrow();
+        });
     });
 
     describe("observers", function(){
