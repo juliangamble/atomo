@@ -1,15 +1,25 @@
+function isValid() { return true; };
+
 function Atom(value, options){
     this._validator = options && options.validator ?
                             options.validator :
-                            function(){ return true; };
-
-    this._historySize = options && (typeof(options.historySize) === 'number') ?
-                            options.historySize :
-                            100;
-
-    this._history = [];
+                            isValid;
     this._watches = [];
+
+    this._validate(value);
     this._value = value;
+};
+
+function atom(value, options){
+    return new Atom(value, options ? options : {});
+};
+
+// Validation
+
+Atom.prototype._validate = function(value){
+    if (!this._validator(value)){
+        throw new Error("The value does not validate: " + value);
+    }
 };
 
 // Watches
@@ -27,43 +37,31 @@ Atom.prototype.removeWatch = function(wf){
     }
 };
 
-Atom.prototype.notifyWatchers = function(oldVal, newVal){
+Atom.prototype._notifyWatchers = function(oldVal, newVal){
     var self = this;
     this._watches.forEach(function(wf){
         wf(self, oldVal, newVal);
     });
 };
 
+// Atomic operations
+
 Atom.prototype.deref = function(){
     return this._value;
 };
 
 Atom.prototype.reset = function(value){
-    // validation
-    if (!this._validator(value)){
-        throw new Error("The value does not validate: " + value);
-    }
     var oldVal = this.deref();
-    // history
-    this._history.push(oldVal);
-    this._history = this._history.reverse()
-                          .slice(0, this._historySize)
-                          .reverse();
+    this._validate(value);
     this._value = value;
-    // watchers
-    this.notifyWatchers(oldVal, value);
+
+    this._notifyWatchers(oldVal, value);
+
+    return value;
 };
 
 Atom.prototype.swap = function(f){
-    this.reset(f(this.deref()));
-};
-
-Atom.prototype.getHistory = function(){
-    return this._history.slice();
-};
-
-function atom(value, options){
-    return new Atom(value, options ? options : {});
+    return this.reset(f(this.deref()));
 };
 
 module.exports = {
