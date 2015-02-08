@@ -1,0 +1,10 @@
+{
+  "name": "atomo",
+  "version": "0.1.0",
+  "devDependencies": {
+    "jest-cli": "^0.2.2"
+  },
+  "scripts": {
+      "test": "jest"
+  }
+}
