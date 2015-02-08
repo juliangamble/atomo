@@ -3,7 +3,7 @@ jest.dontMock("../index");
 var atom = require('../index');
 
 describe("atom", function(){
-    describe("'deref'", function() {
+    describe("'deref'", function(){
         it("returns the current value of the atom", function(){
             var value = 42,
                 at = atom.atom(value);
@@ -12,7 +12,7 @@ describe("atom", function(){
         });
     });
 
-    describe("'reset'", function() {
+    describe("'reset'", function(){
         it("changes the current value of the atom", function(){
             var oldValue = 42,
                 newValue = 43,
@@ -23,7 +23,7 @@ describe("atom", function(){
         });
     });
 
-    describe("'swap'", function() {
+    describe("'swap'", function(){
         it("applies the function to the current value updating it", function(){
             var oldValue = 42,
                 inc = function(x) { return x + 1; },
@@ -34,65 +34,56 @@ describe("atom", function(){
             expect(at.deref()).toBe(expectedNewValue, "The atom should have the value resulting of applying the function given to swap");
         });
     });
+
+    describe("validation", function(){
+        // TODO
+    });
+
+    describe("observers", function(){
+        it("get notified on value change", function(){
+            var oldValue = 42,
+                inc = function(x) { return x + 1; },
+                expectedNewValue = 43,
+                at = atom.atom(oldValue);
+
+            var watcher = jest.genMockFunction();
+            at.addWatch(watcher);
+
+            at.swap(inc);
+
+            expect(watcher).toBeCalledWith(at, oldValue, expectedNewValue);
+        });
+
+        it("all get notified on value change", function(){
+            var oldValue = 42,
+                inc = function(x) { return x + 1; },
+                expectedNewValue = 43,
+                at = atom.atom(oldValue);
+
+            var aWatcher = jest.genMockFunction(),
+                anotherWatcher = jest.genMockFunction();
+            at.addWatch(aWatcher);
+            at.addWatch(anotherWatcher);
+
+            at.swap(inc);
+
+            expect(aWatcher).toBeCalledWith(at, oldValue, expectedNewValue);
+            expect(anotherWatcher).toBeCalledWith(at, oldValue, expectedNewValue);
+        });
+
+        it("can be removed", function(){
+            var oldValue = 42,
+                inc = function(x) { return x + 1; },
+                expectedNewValue = 43,
+                at = atom.atom(oldValue);
+
+            var watcher = jest.genMockFunction();
+            at.addWatch(watcher);
+            at.removeWatch(watcher);
+
+            at.swap(inc);
+
+            expect(watcher).not.toBeCalled();
+        });
+    });
 });
-
-
-//exports.testResetChangesTheCurrentValue = function(test){
-
-//
-//exports.testWatchersGetNotifiedOnValueChange = function(test){
-//    var oldValue = 42,
-//        inc = function(x) { return x + 1; },
-//        expectedNewValue = 43,
-//        at = atom.atom(oldValue);
-//
-//    at.addWatch(function(theAtom, theOldValue, theNewValue){
-//        test.equal(theAtom, at);
-//        test.equal(theOldValue, oldValue);
-//        test.equal(theNewValue, expectedNewValue);
-//        test.done();
-//    });
-//    at.swap(inc);
-//};
-//
-//exports.testMultipleWatchersGetNotifiedOnValueChange = function(test){
-//    var oldValue = 42,
-//        inc = function(x) { return x + 1; },
-//        expectedNewValue = 43,
-//        at = atom.atom(oldValue);
-//
-//    at.addWatch(function(theAtom, theOldValue, theNewValue){
-//        test.equal(theAtom, at);
-//        test.equal(theOldValue, oldValue);
-//        test.equal(theNewValue, expectedNewValue);
-//    });
-//
-//    at.addWatch(function(theAtom, theOldValue, theNewValue){
-//        test.equal(theAtom, at);
-//        test.equal(theOldValue, oldValue);
-//        test.equal(theNewValue, expectedNewValue);
-//        test.done();
-//    });
-//
-//    at.swap(inc);
-//};
-//
-//exports.testWatchersCanBeRemoved = function(test){
-//    var oldValue = 42,
-//        inc = function(x) { return x + 1; },
-//        expectedNewValue = 43,
-//        at = atom.atom(oldValue);
-//
-//    var watch = function(theAtom, theOldValue, theNewValue){
-//        test.ok(false);
-//    };
-//
-//    at.addWatch(watch);
-//    at.removeWatch(watch);
-//    at.swap(inc);
-//
-//    test.done();
-//};
-//
-//// TODO: options: validators
-//
