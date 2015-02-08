@@ -1,6 +1,6 @@
-jest.dontMock("../index");
+jest.dontMock("../atomo");
 
-var atom = require('../index');
+var atom = require('../atomo');
 
 describe("atom", function(){
     describe("'deref'", function(){

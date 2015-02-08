@@ -1,10 +1,22 @@
 {
-  "name": "atomo",
-  "version": "0.1.0",
-  "devDependencies": {
-    "jest-cli": "^0.2.2"
-  },
-  "scripts": {
-      "test": "jest"
-  }
+    "name": "atomo",
+    "description": "Clojure's Atom implementation in JavaScript",
+    "version": "0.1.0",
+    "license": "BSD",
+    "main": "atomo.js",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/dialelo/atomo.git"
+    },
+    "readmeFilename": "README.md",
+    "keywords": [
+        "atom",
+        "observable"
+    ],
+    "devDependencies": {
+        "jest-cli": "^0.2.2"
+    },
+    "scripts": {
+        "test": "jest"
+    }
 }

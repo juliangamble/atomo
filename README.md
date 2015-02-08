@@ -1,4 +1,4 @@
 atomo
 =====
 
-Clojure's Atom implementation in JavaScript
+Clojure's Atom implementation in JavaScript.
