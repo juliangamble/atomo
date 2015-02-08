@@ -1,5 +1,7 @@
 # atomo
 
+[![Travis Badge](https://img.shields.io/travis/dialelo/atomo.svg?style=flat)](https://travis-ci.org/dialelo/atomo "Travis Badge")
+
 Clojure's Atom implementation in JavaScript.
 
 From the [Clojure docs](http://clojure.org/atoms):
