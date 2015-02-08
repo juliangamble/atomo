@@ -60,8 +60,10 @@ Atom.prototype.reset = function(value){
     return value;
 };
 
-Atom.prototype.swap = function(f){
-    return this.reset(f(this.deref()));
+Atom.prototype.swap = function(f /*, args */){
+    var args = [].slice.call(arguments, 1);
+    args.splice(0, 0, this.deref());
+    return this.reset(f.apply(null, args));
 };
 
 module.exports = {

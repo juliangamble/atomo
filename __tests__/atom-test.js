@@ -33,6 +33,16 @@ describe("atom", function(){
             expect(at.swap(inc)).toBe(expectedNewValue, "The swap method should return the new value of the atom");
             expect(at.deref()).toBe(expectedNewValue, "The atom should have the value resulting of applying the function given to swap");
         });
+
+        it("accepts extra arguments after the current atom's value", function(){
+            var oldValue = 42,
+                sum3 = function(x, y, z) { return x + y + z; },
+                expectedNewValue = 99,
+                at = atom.atom(oldValue);
+
+            expect(at.swap(sum3, 7, 50)).toBe(expectedNewValue, "The swap method should return the new value of the atom");
+            expect(at.deref()).toBe(expectedNewValue, "The atom should have the value resulting of applying the function given to swap");
+        });
     });
 
     describe("validation", function(){
