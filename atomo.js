@@ -1,9 +1,10 @@
-function isValid() { return true; };
+// ================================================================================
+//  Constructors
 
 function Atom(value, options){
     this._validator = options && options.validator ?
                             options.validator :
-                            isValid;
+                            isAlwaysValid;
     this._watches = [];
 
     this._validate(value);
@@ -14,6 +15,15 @@ function atom(value, options){
     return new Atom(value, options ? options : {});
 };
 
+// ================================================================================
+//  Static methods
+
+Atom.prototype.isAtom = function(maybeAtom) {
+    return maybeAtom instanceof Atom;
+};
+
+
+// ================================================================================
 // Validation
 
 Atom.prototype._validate = function(value){
@@ -22,6 +32,7 @@ Atom.prototype._validate = function(value){
     }
 };
 
+// ================================================================================
 // Watches
 
 Atom.prototype.addWatch = function(wf){
@@ -44,6 +55,7 @@ Atom.prototype._notifyWatchers = function(oldVal, newVal){
     });
 };
 
+// ================================================================================
 // Atomic operations
 
 Atom.prototype.deref = function(){
@@ -65,6 +77,14 @@ Atom.prototype.swap = function(f /*, args */){
     args.splice(0, 0, this.deref());
     return this.reset(f.apply(null, args));
 };
+
+// ================================================================================
+//  Helpers
+
+function isAlwaysValid() { return true; };
+
+// ================================================================================
+//  Public API
 
 module.exports = {
     atom: atom,
