@@ -16,11 +16,13 @@ function atom(value, options){
 };
 
 // ================================================================================
-//  Static methods
+//  Type checking
 
-Atom.prototype.isAtom = function(maybeAtom) {
+function isAtom(maybeAtom){
     return maybeAtom instanceof Atom;
-};
+}
+
+Atom.prototype.isAtom = isAtom;
 
 
 // ================================================================================
@@ -88,5 +90,6 @@ function isAlwaysValid() { return true; };
 
 module.exports = {
     atom: atom,
-    Atom: Atom
+    Atom: Atom,
+    isAtom: isAtom
 };
