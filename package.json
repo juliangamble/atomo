@@ -1,7 +1,7 @@
 {
     "name": "atomo",
     "description": "Clojure's Atom implementation in JavaScript",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "license": "BSD",
     "main": "atomo.js",
     "repository": {
