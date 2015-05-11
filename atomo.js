@@ -2,17 +2,14 @@
 //  Constructors
 
 function Atom(value, options){
-    this._validator = options && options.validator ?
-                            options.validator :
-                            isAlwaysValid;
+    this._validator = options && options.validator || isAlwaysValid;
     this._watches = [];
-
     this._validate(value);
     this._value = value;
 };
 
 function atom(value, options){
-    return new Atom(value, options ? options : {});
+    return new Atom(value, options || {});
 };
 
 // ================================================================================
